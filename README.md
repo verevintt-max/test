@@ -67,3 +67,45 @@ start_frontend.bat
 ## API документация
 
 После запуска backend доступна по адресу: http://localhost:8000/docs
+
+## Docker деплой
+
+### Сборка и запуск с Docker
+
+```bash
+# Сборка образа
+docker build -t warehouse-app .
+
+# Запуск контейнера
+docker run -d -p 8000:8000 \
+  -v $(pwd)/warehouse_data:/app/warehouse_data \
+  -v $(pwd)/uploads:/app/uploads \
+  --name warehouse-app \
+  warehouse-app
+```
+
+### Использование Docker Compose
+
+```bash
+# Запуск
+docker-compose up -d
+
+# Просмотр логов
+docker-compose logs -f
+
+# Остановка
+docker-compose down
+```
+
+Приложение будет доступно на: http://localhost:8000
+
+### Переменные окружения
+
+- `DATABASE_URL` - URL базы данных (по умолчанию: `sqlite:///./warehouse.db`)
+- `PYTHONUNBUFFERED` - для корректного вывода логов Python
+
+### Важно
+
+- База данных и загруженные файлы сохраняются в volumes для персистентности данных
+- При первом запуске создается база данных SQLite
+- Frontend автоматически собирается и раздается через backend

@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Frontend build (будет собран в Docker)
+frontend/dist/
+frontend/.vite/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Документация
+*.md
+README.md
+PLAN.md
+
+# База данных (если нужно, можно включить)
+*.db
+*.sqlite
+*.sqlite3
+
+# Временные файлы
+*.log
+*.tmp
+*.temp
+
+# Batch файлы (Windows)
+*.bat
+
+# Uploads (будут созданы в контейнере)
+backend/uploads/
+uploads/
+
+# Тесты
+tests/
+test_*.py
+*_test.py
+

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./warehouse.db
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Монтируем базу данных для сохранения данных (SQLite файл)
+      - ./warehouse_data:/app/backend
+      # Монтируем uploads для сохранения загруженных файлов
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
