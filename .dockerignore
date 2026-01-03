@@ -1,29 +1,28 @@
-# Python
+# Исключаем только ненужные файлы, НЕ директории frontend и backend
+
+# Python кэш
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
 .Python
+
+# Виртуальные окружения (но не сам код)
 env/
 venv/
 ENV/
 .venv
-*.egg-info/
-dist/
-build/
 
-# Node
+# Node модули (но не сам код)
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+.npm
 
-# Frontend build (будет собран в Docker)
-# НЕ исключаем frontend/dist на этапе сборки - он нужен для копирования
-# frontend/dist/
-frontend/.vite/
-frontend/node_modules/
+# Временные файлы сборки
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
 
 # IDE
 .vscode/
@@ -36,39 +35,29 @@ frontend/node_modules/
 .DS_Store
 Thumbs.db
 
-# Git
+# Git (но не код)
 .git/
 .gitignore
 
-# Docker
-# НЕ исключаем Dockerfile - он нужен для сборки
+# Docker файлы (но Dockerfile нужен)
 .dockerignore
 docker-compose.yml
 
-# Документация (можно исключить, но не критично)
-# *.md
-# README.md
-# PLAN.md
+# Логи
+*.log
 
-# База данных (если нужно, можно включить)
+# База данных (будет создана в контейнере)
 *.db
 *.sqlite
 *.sqlite3
 
 # Временные файлы
-*.log
 *.tmp
 *.temp
 
-# Batch файлы (Windows)
+# Batch файлы Windows
 *.bat
 
-# Uploads (будут созданы в контейнере)
-backend/uploads/
-uploads/
-
-# Тесты
-tests/
-test_*.py
-*_test.py
-
+# Тесты (опционально)
+# tests/
+# test_*.py
