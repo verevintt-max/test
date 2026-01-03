@@ -8,11 +8,22 @@ WORKDIR /build
 # Копируем весь контекст для доступа к файлам
 COPY . .
 
-# Проверяем наличие файлов и переходим в frontend
+# Проверяем, что скопировалось
+RUN echo "=== Contents of /build ===" && ls -la && \
+    echo "=== Contents of /build/frontend ===" && ls -la frontend/ || echo "frontend directory not found"
+
+# Переходим в frontend
 WORKDIR /build/frontend
 
 # Проверяем наличие package.json
-RUN if [ ! -f package.json ]; then echo "ERROR: package.json not found!" && ls -la /build && exit 1; fi
+RUN echo "=== Checking for package.json ===" && \
+    ls -la && \
+    if [ ! -f package.json ]; then \
+        echo "ERROR: package.json not found!" && \
+        echo "Current directory: $(pwd)" && \
+        echo "Contents:" && ls -la && \
+        exit 1; \
+    fi
 
 # Устанавливаем зависимости
 RUN npm install --legacy-peer-deps
