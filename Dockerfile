@@ -3,16 +3,17 @@
 # Этап 1: Сборка frontend
 FROM node:18-alpine AS frontend-builder
 
-WORKDIR /build
+WORKDIR /app/frontend
 
-# Копируем весь контекст для доступа к frontend
-COPY . .
-
-# Переходим в директорию frontend
-WORKDIR /build/frontend
+# Копируем package файлы
+COPY frontend/package.json ./
+COPY frontend/package-lock.json* ./
 
 # Устанавливаем зависимости
-RUN npm ci
+RUN npm install --legacy-peer-deps
+
+# Копируем остальные файлы frontend
+COPY frontend/ ./
 
 # Собираем frontend
 RUN npm run build
@@ -29,16 +30,16 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Копируем requirements.txt
-COPY --from=frontend-builder /build/backend/requirements.txt ./
+COPY backend/requirements.txt ./
 
 # Устанавливаем Python зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем код backend
-COPY --from=frontend-builder /build/backend/ ./backend/
+COPY backend/ ./backend/
 
 # Копируем собранный frontend из предыдущего этапа
-COPY --from=frontend-builder /build/frontend/dist ./frontend/dist
+COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 
 # Создаем директории для uploads
 RUN mkdir -p uploads/products uploads/qrcodes uploads/production_photos
