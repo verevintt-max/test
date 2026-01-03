@@ -3,16 +3,16 @@
 # Этап 1: Сборка frontend
 FROM node:18-alpine AS frontend-builder
 
-WORKDIR /app/frontend
+WORKDIR /build
 
-# Копируем package.json и package-lock.json
-COPY frontend/package*.json ./
+# Копируем весь контекст для доступа к frontend
+COPY . .
+
+# Переходим в директорию frontend
+WORKDIR /build/frontend
 
 # Устанавливаем зависимости
 RUN npm ci
-
-# Копируем исходники frontend
-COPY frontend/ ./
 
 # Собираем frontend
 RUN npm run build
@@ -25,20 +25,20 @@ WORKDIR /app
 # Устанавливаем системные зависимости
 RUN apt-get update && apt-get install -y \
     gcc \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Копируем requirements.txt
-COPY backend/requirements.txt .
+COPY --from=frontend-builder /build/backend/requirements.txt ./
 
 # Устанавливаем Python зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем код backend
-COPY backend/ ./backend/
+COPY --from=frontend-builder /build/backend/ ./backend/
 
 # Копируем собранный frontend из предыдущего этапа
-# Структура: /app/frontend/dist (соответствует ожиданию в main.py)
-COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+COPY --from=frontend-builder /build/frontend/dist ./frontend/dist
 
 # Создаем директории для uploads
 RUN mkdir -p uploads/products uploads/qrcodes uploads/production_photos
@@ -52,4 +52,3 @@ EXPOSE 8000
 
 # Команда запуска
 CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-

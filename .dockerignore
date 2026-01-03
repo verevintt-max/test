@@ -20,8 +20,10 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # Frontend build (будет собран в Docker)
-frontend/dist/
+# НЕ исключаем frontend/dist на этапе сборки - он нужен для копирования
+# frontend/dist/
 frontend/.vite/
+frontend/node_modules/
 
 # IDE
 .vscode/
@@ -39,14 +41,14 @@ Thumbs.db
 .gitignore
 
 # Docker
-Dockerfile
+# НЕ исключаем Dockerfile - он нужен для сборки
 .dockerignore
 docker-compose.yml
 
-# Документация
-*.md
-README.md
-PLAN.md
+# Документация (можно исключить, но не критично)
+# *.md
+# README.md
+# PLAN.md
 
 # База данных (если нужно, можно включить)
 *.db
